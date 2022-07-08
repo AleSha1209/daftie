@@ -10,8 +10,7 @@ let bot = new TelegramBot('5595431440:AAEQEtkXiTZG63njbn7sG90WnTEeGUTzrak', {pol
 
 const pagesNumber = 4; //
 const baseLink = 'https://www.daft.ie/'; 
-//let linksLength = 20;
-var parsingTimeout = 0; // Стартовое значение задержки следующего запроса (увеличивается с каждым запросом, чтобы не отправлять их слишком часто)
+
 
 let links = {};
 let linksList = {};
@@ -62,14 +61,11 @@ function getLinks(page) {
 
             if(page < pagesNumber) getLinks(++page);
             else {
-                console.log(links);
                 for (let key in links) {
-                    
                     if(!linksList[key]){
                         linksList[key] = links[key];
                         newLinks[key] = links[key];
-                    }
-                        
+                    }   
                 }
                 fs.writeFileSync(filePath, JSON.stringify(linksList), (err) => {
                     if (err) throw err;
@@ -79,11 +75,10 @@ function getLinks(page) {
                     bot.sendMessage('293091374', `Новое объявление - ${newLinks[key]}`);
                 }
                 newLinks = {};
-                
-                parsingTimeout = getRandomArbitrary(1, 3) * 10000;
+            
                 setTimeout(() => {
                     getJSONFile(filePath);
-                }, parsingTimeout);
+                }, 300000);
             }
         });
 }
