@@ -8,8 +8,7 @@ const { JSDOM } = jsdom;
 const TelegramBot = require('node-telegram-bot-api');
 let bot = new TelegramBot('5595431440:AAEQEtkXiTZG63njbn7sG90WnTEeGUTzrak', {polling: false});
 
-const pagesNumber = 4; //
-const baseLink = 'https://www.daft.ie/'; 
+const baseLink = 'https://www.daft.ie'; 
 
 
 let links = {};
@@ -28,9 +27,9 @@ function getJSONFile(path) {
                 if(data != '') linksList = JSON.parse(data);
                 //console.log(linksList);
                 getLinks(1);
-            }
-                
-        });
+            }      
+        }
+    );
 }
 
 function getRandomArbitrary(min, max) {
@@ -44,7 +43,7 @@ function getLinks(page) {
 
     let link = `${baseLink}/property-for-rent/cork?from=${(page - 1) * 20}&pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6`;
 
-    axios.get(link)
+    axios.get(link, {timeout: 5000})
         .then(response => {
 
             console.log('Данные получены');
@@ -75,7 +74,7 @@ function getLinks(page) {
                 });
                 console.log(`Всего объектов - ${Object.keys(links).length}`);
                 for(let key in newLinks) {
-                    bot.sendMessage('293091374', `Новое объявление - ${newLinks[key]}`);
+                    //bot.sendMessage('293091374', `Новое объявление - ${newLinks[key]}`);
                 }
                 newLinks = {};
             
@@ -84,7 +83,10 @@ function getLinks(page) {
                 }, 300000);
             }
         }).catch((e) => {
-            console.log(e);
+            console.log('Ошибка. Ожидание - 5 секунд');
+            setTimeout(() => {
+                getJSONFile(filePath);
+            }, 5000);
         });
 }
 
