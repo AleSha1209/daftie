@@ -6,10 +6,24 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 const TelegramBot = require('node-telegram-bot-api');
-let bot = new TelegramBot('5595431440:AAEQEtkXiTZG63njbn7sG90WnTEeGUTzrak', {polling: false});
+let bot = new TelegramBot('5401004376:AAE8I7UU--tCEqodpi61FdA6ZnMV0vSg2kQ', {polling: true});
+
+bot.on('message', (msg) => {
+    let a = 'Привет, Диана =)';
+    let b = 'С этой минуты ссылки на новые объекты по твоему запросу будут своевременно приходить в этот чат.';
+    let c = 'С актуальными объектами можешь ознакомиться по ссылке https://daft.ie/property-for-rent/cork?from=0&pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6';
+    
+    if(msg.text == '/start') {
+        bot.sendMessage(msg.chat.id, a)
+        .then(() => {
+            bot.sendMessage(msg.chat.id, b);
+        }).then(() => {
+            bot.sendMessage(msg.chat.id, c);
+        }); 
+    } 
+});
 
 const baseLink = 'https://www.daft.ie'; 
-
 
 let links = {};
 let linksList = {};
@@ -24,8 +38,10 @@ function getJSONFile(path) {
             if(err)
                 console.log(err);
             else {
-                if(data != '') linksList = JSON.parse(data);
-                //console.log(linksList);
+                if(data != '') {
+                    linksList = JSON.parse(data);
+                    console.log(Object.keys(linksList).length);
+                }
                 getLinks(1);
             }      
         }
@@ -74,7 +90,8 @@ function getLinks(page) {
                 });
                 console.log(`Всего объектов - ${Object.keys(links).length}`);
                 for(let key in newLinks) {
-                    //bot.sendMessage('293091374', `Новое объявление - ${newLinks[key]}`);
+                    bot.sendMessage('743648517', `Новый объект - ${newLinks[key]}`);
+                    bot.sendMessage('293091374', `Новое объявление - ${newLinks[key]}`);
                 }
                 newLinks = {};
             
