@@ -11,7 +11,7 @@ let bot = new TelegramBot('5401004376:AAE8I7UU--tCEqodpi61FdA6ZnMV0vSg2kQ', {pol
 bot.on('message', (msg) => {
     let a = 'Привет, Диана =)';
     let b = 'С этой минуты ссылки на новые объекты по твоему запросу будут своевременно приходить в этот чат.';
-    let c = 'С актуальными объектами можешь ознакомиться по ссылке https://daft.ie/property-for-rent/cork?from=0&pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6';
+    let c = 'С актуальными объектами можешь ознакомиться по ссылке https://www.daft.ie/property-for-rent/cork-city?pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6&radius=5000';
     
     if(msg.text == '/start') {
         bot.sendMessage(msg.chat.id, a)
@@ -27,7 +27,7 @@ const baseLink = 'https://www.daft.ie';
 
 let links = {};
 let linksList = {};
-const filePath = 'links.json';
+const filePath = 'links_cork_city.json';
 let newLinks = {};
 
 function getJSONFile(path) {
@@ -57,7 +57,7 @@ function getLinks(page) {
     console.log('Запрос на получение ссылок отправлен');
     console.log(`Страница - ${page}`);
 
-    let link = `${baseLink}/property-for-rent/cork?from=${(page - 1) * 20}&pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6`;
+    let link = `${baseLink}/property-for-rent/cork-city?from=${(page - 1) * 20}&pageSize=20&sort=publishDateDesc&rentalPrice_to=1000&leaseLength_from=6&radius=5000`;
 
     axios.get(link, {timeout: 5000})
         .then(response => {
